@@ -1,0 +1,189 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>Document</title>
+	<script src="../jquery工程文件/jQuery-1.12.0.js"></script>
+</head>
+<style>
+
+	body,html{
+    height: 100%;
+    font-family: "微软雅黑";
+  }
+  *{
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+ .box1{
+        width:1366px;
+        height:650px;
+        background:url(0001.jpg);
+        position: absolute;
+        top:-650px;
+        left:0;
+        z-index: 11;
+  }
+  .box{
+        width:1366px;
+        height:650px;
+        background: url(1.jpg);
+
+  }
+	#sence{
+		width:600px;
+		height:600px;
+		border: 1px solid black;
+   /* background:url(9.jpg);*/
+    position: absolute;
+    margin: auto;
+    left:0;
+    top:0;
+    right:0;
+    bottom: 0;
+
+	}
+	.block{
+		width:58px;
+		height:58px;
+   /* background: url(114.jpg);*/
+		border: 1px solid black;
+		float:left;
+		text-align: center;
+		line-height: 58px;
+     /*background:url(2.gif);*/
+	}
+	.tip{
+		background: #fff;
+	}
+	.biaoji::after{
+		content: '♕';
+    font-size: 40px;
+	}
+  /*.box3{
+    width:500px;
+    height:500px;
+    background: url(112.jpg);
+    position: absolute;
+    margin:auto;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    display: none;
+  }*/
+  /*.box4{
+    width:500px;
+    height:500px;
+    background: url(113.jpg);
+    position: absolute;
+    margin:auto;
+    top:-1300px;
+    left:0;
+    right:0;
+    bottom:0;
+
+  }*/
+	h1{
+		position: absolute;
+		z-index: 1;
+		font-size: 100px;
+		top:0;
+		left:0;
+	}
+</style>
+<body>
+  <div class="box1"></div>
+    <div class="box">
+	  <div id="sence">
+			<!-- <h1>开 始 吧！</h1> -->
+		</div>
+
+    <div class="box3"></div>
+     <div class="box4"></div>
+    </div>
+</body>
+<script>
+      $('.box1').animate({top:0},500)
+        .fadeOut(3000)
+      //  .animate({width:'toggle',height:'toggle'},20000)
+
+      //  $('.box3').fadeIn(4000)
+      //  .animate({top:-1300},200)
+
+
+    $(document).on('contextmenu',false)
+    var xy2id=function(a,b){
+      return a+'-'+b
+    }
+    var jisuan=function(x,y){
+    	var num=0
+    	if($('#'+xy2id(x-1,y-1)).is('.lei')){num++}
+    	if($('#'+xy2id(x-1,y)).is('.lei')){num++}
+    	if($('#'+xy2id(x-1,y+1)).is('.lei')){num++}
+    	if($('#'+xy2id(x,y-1)).is('.lei')){num++}
+    	if($('#'+xy2id(x,y+1)).is('.lei')){num++}
+    	if($('#'+xy2id(x+1,y-1)).is('.lei')){num++}
+    	if($('#'+xy2id(x+1,y)).is('.lei')){num++}
+    	if($('#'+xy2id(x+1,y+1)).is('.lei')){num++}
+    	return num
+    }
+    var zuojian=function(e){
+    	if($(this).is('.biaoji')){
+    		return
+    	}
+    	if(e.data.lei){
+    		alert('死了')
+        //  $('.box4').animate({top:0},200)
+        //  .delay(500)
+        //  .fadeOut(1000)
+        $('.lei').css('background','url(114.png)')
+
+        // $('.lei').css('backgroundColor','pink')
+    	}else{
+
+    		$(this).text(jisuan(e.data.x,e.data.y)).addClass('tip')
+
+    	}
+    }
+    var youjian=function(e){
+    	if($(this).is('.tip')){
+    		return
+    	}
+    	$(this).toggleClass('biaoji')
+
+    	if($('.biaoji').length===$('.lei').length){
+    		if($('.biaoji.lei').length===$('.lei').length){
+    		alert('赢了')
+           }
+    	}
+
+    }
+    var clickHandler=function(e){
+      if(e.which===1){
+      	// zuojian.call(this,e)
+      	$.proxy(zuojian,this)(e)
+      }else if(e.which===3){
+      	// youjian.call(this,e)
+      	$.proxy(youjian,this)(e)
+      }
+    }
+	for(var i=0;i<10;i++){
+		for(var j=0;j<10;j++){
+			var islei=Math.random()>0.9
+			$('<div>')
+			.attr('id',i+'-'+j)
+			// .css('background','url(114.png)')
+			.addClass(function(){
+				return 'block '+(islei ? 'lei':'')
+			})
+			// .text(function(){
+			// 	return islei ? 'lei':''
+			// })
+			.on('mousedown',{x:i,y:j,lei:islei},clickHandler)
+			.appendTo('#sence')
+		}
+	}
+</script>
+</html>
